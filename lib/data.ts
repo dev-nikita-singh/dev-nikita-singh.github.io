@@ -1,15 +1,15 @@
 export const profile = {
   name: "Nikita Singh",
   brand: "Nikita Singh",
-  role: "Developer & Builder",
+  role: "Agentic Systems",
   company: "Sovaria",
   location: "Delhi",
   site: "https://sovaria.in",
   github: "https://github.com/dev-nikita-singh",
-  avatar: "/images/avatar.png",
-  bio: "Building intelligent systems at the intersection of agentic AI, software engineering, and open source. Learning by building, breaking, and rebuilding.",
+  avatar: "/images/nikita-avatar.png",
+  bio: "I design and ship intelligent systems — agents that plan, tools that stay reliable, and infrastructure that does not flinch under real load.",
   tagline:
-    "Turning ambitious ideas into working products — agents, infrastructure, and systems that feel inevitable once they exist.",
+    "Agentic AI, open systems, and products that feel inevitable once they ship.",
 };
 
 /** Social profiles shown in the hero — edit URLs here. */
@@ -21,17 +21,17 @@ export const socials = [
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/dev-nikita-singh",
+    href: "https://www.linkedin.com/in/miss-nikita-singh",
     icon: "linkedin" as const,
   },
   {
     label: "X",
-    href: "https://x.com/dev_nikita",
+    href: "https://x.com/dev_nikita_singh",
     icon: "x" as const,
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/dev.nikita",
+    href: "https://www.instagram.com/dev_nikita_singh",
     icon: "instagram" as const,
   },
 ];
@@ -132,10 +132,9 @@ export const projects = [
 
 export const experiences = [
   {
-    role: "Builder",
+    role: "Co-Founder",
     org: "Sovaria",
     period: "2025 — Present",
-    year: "2025",
     location: "Delhi",
     type: "Full-time",
     points: [
@@ -148,7 +147,6 @@ export const experiences = [
     role: "Open Source Explorer",
     org: "Independent",
     period: "2024 — Ongoing",
-    year: "2024",
     location: "Remote",
     type: "Independent",
     points: [
@@ -161,7 +159,6 @@ export const experiences = [
     role: "Systems Learner",
     org: "Self-directed",
     period: "2023 — 2024",
-    year: "2023",
     location: "Delhi",
     type: "Learning",
     points: [
@@ -179,6 +176,30 @@ export type BlogLink = {
   kind?: "github" | "article" | "demo" | "docs" | "external";
 };
 
+/** Structured essay blocks — prose, tables, splits, feature grids. */
+export type BlogBlock =
+  | { type: "p"; text: string }
+  | { type: "h2"; text: string }
+  | { type: "list"; items: string[] }
+  | { type: "callout"; text: string }
+  | {
+      type: "table";
+      caption?: string;
+      headers: string[];
+      rows: string[][];
+    }
+  | {
+      type: "split";
+      left: BlogBlock[];
+      right: BlogBlock[];
+    }
+  | {
+      type: "features";
+      title: string;
+      lead?: string;
+      items: { title: string; points: string[] }[];
+    };
+
 /**
  * Add a new essay by appending an object below.
  * Required: slug, title, excerpt, date (YYYY-MM-DD), category, tags, content.
@@ -194,144 +215,396 @@ export type BlogPost = {
   links?: BlogLink[];
   readMinutes: number;
   image: string;
-  content: string[];
+  content: BlogBlock[];
   featured?: boolean;
 };
 
 const blogPosts: BlogPost[] = [
   {
-    slug: "agentic-systems-need-boring-infrastructure",
-    title: "Why agentic systems need boring infrastructure",
+    slug: "opencanvasx-local-first-design-studio",
+    title: "OpenCanvasX: local-first design without the cloud tax",
     excerpt:
-      "Agents feel magical until latency, retries, and state management remind you they are software.",
-    date: "2026-09-12",
-    category: "Systems",
-    tags: ["agents", "infrastructure", "reliability"],
+      "A deep look at OpenCanvasX — why local-first creative tooling matters, how the monorepo is shaped, and what builders should watch as the studio grows past Phase 0.",
+    date: "2026-10-03",
+    category: "Open Source",
+    tags: ["opencanvasx", "local-first", "design", "flutter", "rust"],
     links: [
       {
-        label: "Related notes on GitHub",
-        href: "https://github.com/dev-nikita-singh",
+        label: "OpenCanvasX on GitHub",
+        href: "https://github.com/tejashvi-kumawat/OpenCanvasX",
         kind: "github",
       },
     ],
-    readMinutes: 7,
-    image: "/images/earth-network.jpg",
-    featured: true,
-    content: [
-      "Agent demos look like magic. An LLM plans, calls tools, and ships a result while everyone watches the chat stream. Then you put the same loop into a product and discover the hard parts were never the prompts.",
-      "Latency compounds. Each tool call is another network hop, another queue, another chance to time out. Without budgets, retries, and clear failure modes, the agent does not feel intelligent — it feels stuck.",
-      "State is the other cliff. Agents need memory that is durable, queryable, and honest about what they already tried. Hand-waving “context windows” is not a storage strategy. Boring stores — queues, idempotency keys, job tables — keep long-running work recoverable.",
-      "Evaluation belongs next to shipping. If you cannot tell whether a run succeeded for the right reason, you cannot improve it. Log traces, score outcomes, and treat regressions like any other production incident.",
-      "The takeaway is simple: treat agents like distributed systems with a language model in the middle. The boring infrastructure is what makes the magic repeatable.",
-    ],
-  },
-  {
-    slug: "building-what-you-wish-existed",
-    title: "Building what you wish existed",
-    excerpt:
-      "A short note on choosing projects that teach you the next layer of the stack.",
-    date: "2026-08-02",
-    category: "Craft",
-    tags: ["product", "learning", "shipping"],
-    links: [
-      {
-        label: "Personal Dashboard Hub",
-        href: "https://github.com/dev-nikita-singh/personal-dashboard-hub",
-        kind: "github",
-      },
-    ],
-    readMinutes: 5,
-    image: "/images/laptop-work.jpg",
-    content: [
-      "Most of my useful projects started as personal friction. A dashboard I kept wishing for. An expense flow that did not feel like homework. A tiny experiment that answered one stubborn question.",
-      "Wish-driven work has a built-in compass. You know the empty state because you live in it. That makes scope decisions sharper: ship the piece that removes the pain, then stop before the project becomes a second job.",
-      "The learning compounds when the wish sits one layer above what you already know. Stretch into systems, storage, or agents — but keep a path back to a usable surface. Theory without a shippable edge rarely sticks.",
-      "I keep a short list of “I wish this existed” notes. When energy is high, I pick one and build the thinnest version that would make tomorrow easier. That habit has taught me more than any tutorial playlist.",
-    ],
-  },
-  {
-    slug: "security-as-a-product-habit",
-    title: "Security as a product habit",
-    excerpt:
-      "Threat models that fit in a standup — and why small checks beat late audits.",
-    date: "2026-06-18",
-    category: "Security",
-    tags: ["security", "habits", "product"],
-    readMinutes: 6,
-    image: "/images/circuits.jpg",
-    content: [
-      "Security fails when it only shows up at the end. A late audit can find issues, but it cannot invent the habits that would have prevented them.",
-      "I like threat models that fit in a standup: who can touch this, what happens if a token leaks, and which path is the blast radius. Three questions. Written down. Revisited when the surface changes.",
-      "Small checks beat heroic reviews. Least privilege by default. Secrets out of the client. Inputs validated at the edge. Dependency updates treated like product work, not weekend guilt.",
-      "Product teams ship faster when security is boring and local. Make the safe path the easy path, and most of the drama disappears before it becomes an incident report.",
-    ],
-  },
-  {
-    slug: "notes-on-shipping-agents",
-    title: "Notes on shipping agents people actually use",
-    excerpt:
-      "Demos optimize for surprise. Products optimize for recovery when the agent is wrong.",
-    date: "2026-05-03",
-    category: "Agents",
-    tags: ["agents", "ux", "evaluation"],
-    links: [
-      {
-        label: "Sovaria",
-        href: "https://sovaria.in",
-        kind: "external",
-      },
-    ],
-    readMinutes: 8,
+    readMinutes: 12,
     image: "/images/ai-systems.jpg",
     featured: true,
     content: [
-      "A good agent demo surprises people. A good agent product recovers when the surprise is wrong. Those are different design problems.",
-      "Users need an escape hatch. Show what the agent is about to do, let them edit the plan, and make undo obvious. Trust is not a vibe — it is a control surface.",
-      "Tool design matters more than clever prompting. Narrow tools with clear contracts beat a mega-tool that can “do anything.” Narrow tools fail loudly. Mega-tools fail mysteriously.",
-      "Measure usefulness, not just completion. Did the user accept the result? Did they retry? Did they abandon the flow? Those signals tell you whether the agent is helping or performing.",
-      "Ship the smallest loop that creates value, instrument it, then deepen autonomy only where the data says the human is bottlenecked — not where the demo look cooler.",
-    ],
-  },
-  {
-    slug: "open-source-as-a-practice",
-    title: "Open source as a practice, not a portfolio prop",
-    excerpt:
-      "Public work is useful when it leaves a trail others can follow — including your future self.",
-    date: "2026-03-21",
-    category: "Open Source",
-    tags: ["open-source", "docs", "community"],
-    links: [
       {
-        label: "GitHub profile",
-        href: "https://github.com/dev-nikita-singh",
-        kind: "github",
+        type: "p",
+        text: "Most design tools today assume the cloud is the product. You create an account, sync canvases to someone else’s servers, and treat collaboration as “upload first, edit later.” That model is fine when drafts are disposable. It is a poor default when diagrams describe infrastructure, decks are client-confidential, or AI features mean shipping your work into a vendor model you do not control.",
+      },
+      {
+        type: "p",
+        text: "OpenCanvasX takes the opposite bet: a free, open-source, local-first design studio where the file on disk is still the source of truth. I am writing this up because the architecture — not just the pitch — is what serious builders should study. Offline reliability, plugin boundaries, honest AI keys, and eventual peer collaboration are the same systems problems I care about in agentic products. They just happen to wear a canvas UI here.",
+      },
+      {
+        type: "split",
+        left: [
+          {
+            type: "p",
+            text: "Cloud suites optimized for sync and subscription. OpenCanvasX optimizes for ownership: open the file, edit offline, optionally bring your own AI, and only reach for the network when collaboration actually needs it.",
+          },
+          {
+            type: "table",
+            caption: "Cloud suite vs OpenCanvasX",
+            headers: ["Dimension", "Cloud suite", "OpenCanvasX"],
+            rows: [
+              ["Source of truth", "Account + remote project", "Local files on disk"],
+              ["Account wall", "Required for full use", "Optional — not mandatory"],
+              ["AI", "Vendor model, metered", "BYOK + local AI paths"],
+              ["Collaboration", "Central server sync", "Secure P2P (planned)"],
+              ["Extensibility", "Closed plugin markets", "Plugins & templates in-repo"],
+              ["License", "SaaS subscription", "Apache-2.0 open source"],
+            ],
+          },
+          {
+            type: "callout",
+            text: "Why it matters: no mandatory upload, no account gate, no cloud silently owning your drafts.",
+          },
+        ],
+        right: [
+          {
+            type: "p",
+            text: "This is not “one more Figma clone.” The product framing is a studio surface for multiple creative modes — graphics, illustrations, presentations, documents, diagrams, animation, and video — with plugins, templates, offline editing, and optional AI without forcing an account.",
+          },
+          {
+            type: "list",
+            items: [
+              "Local files remain the canonical source of truth",
+              "AI via bring-your-own-key or local models — not a locked vendor lane",
+              "Plugins and templates treated as first-class extensions",
+              "Collaboration planned as secure peer-to-peer, not mandatory cloud sync",
+              "Apache-2.0 so the stack can be audited and extended",
+            ],
+          },
+          {
+            type: "p",
+            text: "That combination is rare. Most “open” creative tools still lean on a hosted backend for the interesting path. OpenCanvasX is trying to keep the interesting path local.",
+          },
+        ],
+      },
+      {
+        type: "h2",
+        text: "What “local-first” actually buys you",
+      },
+      {
+        type: "p",
+        text: "Local-first is not nostalgia for desktop software. It is a reliability and trust model. If the network drops, the tool still works. If a company changes pricing, your files do not become hostage. If you are drafting something sensitive, the default path never silently uploads bytes “for sync.” Collaboration can still exist later — as an explicit protocol — instead of “everything syncs because the product needs telemetry.”",
+      },
+      {
+        type: "split",
+        left: [
+          {
+            type: "h2",
+            text: "Failure modes that stay obvious",
+          },
+          {
+            type: "list",
+            items: [
+              "Save means write to disk you control",
+              "AI calls are opt-in and keyed by you",
+              "Plugins have clear package boundaries",
+              "No mystery remote convert queue for basic edits",
+            ],
+          },
+        ],
+        right: [
+          {
+            type: "h2",
+            text: "Where this overlaps agentic systems",
+          },
+          {
+            type: "list",
+            items: [
+              "State close to the user, not buried in a SaaS blob",
+              "Tools with honest permissions and clear I/O",
+              "Optional network instead of ambient sync",
+              "Extensibility without shipping secrets to a vendor",
+            ],
+          },
+        ],
+      },
+      {
+        type: "features",
+        title: "Repository shape (why the monorepo matters)",
+        lead: "Still early — Phase 0 scaffolding — but the layout already signals a serious desktop product, not a demo repo.",
+        items: [
+          {
+            title: "apps/desktop",
+            points: [
+              "Flutter desktop application shell",
+              "Primary surface for creative modes",
+              "Melos-managed monorepo bootstrap",
+            ],
+          },
+          {
+            title: "packages + rust",
+            points: [
+              "Dart engines and shared libraries",
+              "Rust native core (ods_native)",
+              "Bridged with flutter_rust_bridge",
+            ],
+          },
+          {
+            title: "docs + extensions",
+            points: [
+              "Architecture and protocol notes",
+              "Templates, assets, plugins (later phases)",
+              "Scripts for bootstrap, codegen, release",
+            ],
+          },
+        ],
+      },
+      {
+        type: "p",
+        text: "The Flutter + Rust split is intentional. Flutter gives UI velocity across desktop targets. Rust owns performance-sensitive and native work. That is the same instinct behind serious offline tools: keep the shell productive, push the hot path into a language that can hold the line when canvases, codecs, or engines get heavy.",
+      },
+      {
+        type: "table",
+        caption: "Stack instincts at a glance",
+        headers: ["Layer", "Choice", "Why it fits"],
+        rows: [
+          ["UI shell", "Flutter desktop", "Cross-platform UI velocity"],
+          ["Engines", "Dart packages", "Shared logic next to the app"],
+          ["Native core", "Rust + FRB", "Performance + safe boundaries"],
+          ["Extensibility", "Plugins / templates", "Growth without rewriting the shell"],
+          ["AI", "BYOK + local paths", "No mandatory vendor lock-in"],
+          ["Collab (planned)", "Secure P2P", "Sync without owning user files"],
+        ],
+      },
+      {
+        type: "h2",
+        text: "What I am watching next",
+      },
+      {
+        type: "p",
+        text: "Phase 0 means the product is still scaffolding — and that is fine. The interesting questions are already visible: how plugin APIs stay stable, how AI stays optional without feeling second-class, how P2P collaboration earns trust without becoming “cloud sync with extra steps,” and how file formats stay boring enough to last.",
+      },
+      {
+        type: "list",
+        items: [
+          "Does the canvas file format stay portable and inspectable?",
+          "Do plugins get clear sandboxes and versioning?",
+          "Can local AI feel first-class without a vendor account?",
+          "Does collaboration stay peer-shaped when it arrives?",
+        ],
+      },
+      {
+        type: "callout",
+        text: "If you build systems or agents, projects like this are worth starring early — the hard problems show up before the marketing polish does.",
+      },
+      {
+        type: "p",
+        text: "OpenCanvasX will not replace every cloud suite tomorrow. That is not the point. The point is a credible open path where creative work can stay on the machine that created it — and where the architecture admits that ownership, offline, and extensibility are product features, not afterthoughts. Repo: github.com/tejashvi-kumawat/OpenCanvasX.",
       },
     ],
-    readMinutes: 5,
-    image: "/images/code-desk.jpg",
-    content: [
-      "Open source is easy to treat like decoration: a row of repos that prove you exist. The useful version is a practice — a habit of leaving trails.",
-      "I try to publish the sharp edges, not just the polished README. How did the queue fail? Which assumption broke in production? What would I delete if I started again?",
-      "Small contributions count when they compound. Fixing docs, adding tests, clarifying an API — those are how you learn a codebase from the inside.",
-      "Future-you is also an audience. A clear commit message and a short note in an issue can save weeks later. Public work is a gift to strangers and a letter to yourself.",
-    ],
   },
   {
-    slug: "distributed-systems-for-builders",
-    title: "Distributed systems for builders who ship",
+    slug: "document-studio-offline-pdf-toolkit",
+    title: "Why Document Studio beats Adobe suites and online PDF tools",
     excerpt:
-      "You do not need a PhD to respect failure modes — you need a bias for boring defaults.",
-    date: "2026-01-14",
-    category: "Systems",
-    tags: ["distributed-systems", "queues", "observability"],
-    readMinutes: 7,
-    image: "/images/earth-network.jpg",
+      "Notes on Document Studio — an offline-first PDF workspace I helped research — and why local pipelines beat Acrobat subscriptions and upload-everything converters.",
+    date: "2026-09-20",
+    category: "Tools",
+    tags: ["pdf", "offline", "document-studio", "privacy", "research"],
+    links: [
+      {
+        label: "Document Studio repo",
+        href: "https://github.com/tejashvi-kumawat/DocumentStudio",
+        kind: "github",
+      },
+      {
+        label: "Docs site",
+        href: "https://tejashvi-kumawat.github.io/DocumentStudio/",
+        kind: "docs",
+      },
+      {
+        label: "Latest release",
+        href: "https://github.com/tejashvi-kumawat/DocumentStudio/releases",
+        kind: "external",
+      },
+    ],
+    readMinutes: 10,
+    image: "/images/laptop-work.jpg",
+    featured: true,
     content: [
-      "Builders meet distributed systems the moment one machine is not enough — or the moment one machine fails at the wrong time. Both happen earlier than you expect.",
-      "Start with boring defaults: idempotent writes, explicit timeouts, retries with jitter, and a queue between things that should not block each other. These are not academic ideas. They are how products stay calm.",
-      "Consistency is a product decision. Sometimes “eventually” is fine. Sometimes it ruins trust. Name the tradeoff in the UI and in the code so the next person does not invent a worse one under pressure.",
-      "Observability is part of the system. If you cannot see lag, error budgets, or poison messages, you are flying blind. Ship dashboards with the feature, not after the outage.",
-      "You can learn this craft by building. Put a job queue in a side project. Break it on purpose. That scar tissue is worth more than another abstract lecture.",
+      {
+        type: "p",
+        text: "I spent time on the research side of Document Studio — mapping what people actually need from a PDF tool, where Adobe suites feel heavy, and why “just upload it” web converters are a bad default for anything confidential. The result is a free, ad-free, offline-first desktop workspace for Windows, macOS, and Linux: merge, split, compress, encrypt, OCR, redact, and Office→PDF without sending your files to a stranger’s server.",
+      },
+      {
+        type: "p",
+        text: "This post is my commentary on why that model is nicer — and honestly better — for a lot of day-to-day work than paying for Acrobat-class suites or trusting online tools with client decks, contracts, and scans.",
+      },
+      {
+        type: "split",
+        left: [
+          {
+            type: "p",
+            text: "Adobe and similar suites are powerful, but they optimize for subscription, cloud continuity, and account identity. Online converters optimize for convenience — which usually means your PDF leaves the machine before anything useful happens.",
+          },
+          {
+            type: "table",
+            caption: "Acrobat / online tools vs Document Studio",
+            headers: ["", "Acrobat / suites", "Online converters", "Document Studio"],
+            rows: [
+              ["Account", "Usually required", "Often required", "Not for core tools"],
+              ["Files go", "Cloud / vendor path", "Uploaded remotely", "Stay on your disk"],
+              ["Pricing", "Subscription", "Freemium / ads", "Free, ad-free"],
+              ["Source", "Closed", "Closed", "Open on GitHub"],
+              ["Latency", "App + sync tax", "Upload + remote job", "Local pipeline"],
+              ["Trust model", "Vendor policy", "Whoever hosts it", "Your machine"],
+            ],
+          },
+          {
+            type: "callout",
+            text: "Why it feels faster and safer: no account gate, no upload round-trip, no remote convert queue, no mystery third party holding the bytes.",
+          },
+        ],
+        right: [
+          {
+            type: "p",
+            text: "What I liked most while researching this space is how rare honesty is. Lots of tools claim “privacy.” Few make the default path obviously local. Document Studio does: encryption needs the real password, redaction removes content instead of painting a black box, and installers land in Start Menu / Applications / Linux menus like normal software.",
+          },
+          {
+            type: "list",
+            items: [
+              "Core tools never silently upload document bytes",
+              "Honest security — encrypt, decrypt, and redact for real",
+              "Desktop installs you can find again next week",
+              "Local engines: qpdf, Tesseract, LibreOffice, PDFium",
+              "No ads, no account wall for everyday PDF work",
+            ],
+          },
+          {
+            type: "p",
+            text: "That is the product I wished existed when comparing “pay Adobe” vs “yeet the PDF into a random website.” Document Studio is the third option.",
+          },
+        ],
+      },
+      {
+        type: "h2",
+        text: "Where I helped: research",
+      },
+      {
+        type: "p",
+        text: "My contribution sat in research — competitor teardown, feature prioritization, and the trust questions users actually ask before they install anything. Which Acrobat workflows are table-stakes? Where do online tools fail on latency and confidentiality? Which promises have to be true on day one (offline core, honest redaction, no account) versus nice-to-have later?",
+      },
+      {
+        type: "split",
+        left: [
+          {
+            type: "h2",
+            text: "Research questions we kept returning to",
+          },
+          {
+            type: "list",
+            items: [
+              "What must work fully offline on first launch?",
+              "Which Acrobat habits are non-negotiable for students and builders?",
+              "Where do upload-based tools create unacceptable trust gaps?",
+              "How do we explain privacy without marketing fog?",
+            ],
+          },
+        ],
+        right: [
+          {
+            type: "h2",
+            text: "What that research pushed into the product",
+          },
+          {
+            type: "list",
+            items: [
+              "Offline-first as a hard default, not a footnote",
+              "Clear comparison against suites and web converters",
+              "Feature map grouped by real jobs (organize, protect, OCR)",
+              "Public docs and open source so claims can be checked",
+            ],
+          },
+        ],
+      },
+      {
+        type: "features",
+        title: "Features (what you can actually do)",
+        lead: "Everything below runs offline on the device that opened the file — the part that made the research feel worth it.",
+        items: [
+          {
+            title: "Home & library",
+            points: [
+              "Open / create PDF",
+              "Images → PDF",
+              "Pinned & recent",
+              "Searchable tools hub",
+            ],
+          },
+          {
+            title: "Organize",
+            points: [
+              "Merge, split, extract",
+              "Insert, replace, reorder",
+              "Rotate, crop, resize",
+              "Blank pages",
+            ],
+          },
+          {
+            title: "Optimize & protect",
+            points: [
+              "Compress & watermark",
+              "Metadata edit/remove",
+              "Encrypt / decrypt",
+              "Redact + page numbers",
+            ],
+          },
+        ],
+      },
+      {
+        type: "split",
+        left: [
+          {
+            type: "h2",
+            text: "Why this beats Adobe for many people",
+          },
+          {
+            type: "p",
+            text: "Acrobat is deep. Most people do not need the deep end every day. They need merge, compress, encrypt, OCR, and a tool that does not nickle-and-dime them for basic jobs. Document Studio covers that lane without a subscription tax — and without pretending cloud sync is mandatory for editing a PDF on your laptop.",
+          },
+        ],
+        right: [
+          {
+            type: "h2",
+            text: "Why this beats online tools",
+          },
+          {
+            type: "p",
+            text: "Online converters win on zero install. They lose on trust and round-trips. If the file is personal, client-owned, or even mildly sensitive, uploading it to convert pages is the wrong first step. Local pipelines remove that decision entirely.",
+          },
+        ],
+      },
+      {
+        type: "table",
+        caption: "Privacy defaults that came out of the research",
+        headers: ["Promise", "What it means"],
+        rows: [
+          ["Offline core tools", "Pipelines run on the machine that opened the file"],
+          ["No password cracking", "Encryption needs the real password"],
+          ["Honest redaction", "Content removed — not only covered"],
+          ["No account for core use", "Open → run tool → save"],
+        ],
+      },
+      {
+        type: "p",
+        text: "Local-first utilities are infrastructure for trust. Whether you ship agents, client decks, or coursework PDFs, the boring question is the same: who holds the bytes? Document Studio answers that clearly. I am glad I got to help pressure-test that answer on the research side — and I think more tools should be this honest. Start at github.com/tejashvi-kumawat/DocumentStudio.",
+      },
     ],
   },
 ];

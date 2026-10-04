@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/Hero";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { StickyHandoffFade } from "@/components/StickyHandoffFade";
 import { AboutSection } from "@/components/sections/AboutSection";
 
 function SectionFallback() {
@@ -40,16 +42,22 @@ export default function Home() {
   return (
     <>
       <SiteHeader />
+      <StickyHandoffFade />
       <main className="bg-white">
         <Hero />
-        <div className="relative">
+        <div className="sticky-stack">
           <AboutSection />
+          <div className="section-seam" aria-hidden="true" />
           <InterestsSection />
+          <div className="section-seam" aria-hidden="true" />
           <ProjectsSection />
+          <div className="section-seam" aria-hidden="true" />
           <ExperienceSection />
+          <div className="section-seam" aria-hidden="true" />
           <BlogsSection />
         </div>
       </main>
+      <SiteFooter />
     </>
   );
 }

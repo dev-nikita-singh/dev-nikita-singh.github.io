@@ -16,14 +16,17 @@ const body = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Nikita Singh — Developer & Builder",
+  title: "Nikita Singh — Agentic Systems",
   description:
-    "Portfolio of Nikita Singh — building intelligent systems at the intersection of agentic AI, software engineering, and open source.",
+    "Nikita Singh — agentic AI, reliable infrastructure, and open-source systems that ship.",
   metadataBase: new URL("https://dev-nikita-singh.github.io"),
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
   openGraph: {
-    title: "Nikita Singh — Developer & Builder",
+    title: "Nikita Singh — Agentic Systems",
     description:
-      "Agentic AI, software engineering, and systems that ship. Portfolio of Nikita Singh.",
+      "Agentic AI, open systems, and products that feel inevitable once they ship.",
     url: "https://dev-nikita-singh.github.io",
     siteName: "Nikita Singh",
     type: "website",

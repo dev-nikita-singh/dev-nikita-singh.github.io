@@ -22,6 +22,7 @@ export function ScrollReveal({
       el.classList.add("is-visible");
       return;
     }
+    // Viewport root — sticky panels scrub via transform, not overflow scroll
     const io = new IntersectionObserver(
       ([entry]) => {
         el.classList.toggle("is-visible", entry.isIntersecting);

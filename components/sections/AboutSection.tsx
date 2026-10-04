@@ -1,77 +1,168 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
-import Image from "next/image";
 import { StickySection } from "@/components/StickySection";
-import { TiltCard } from "@/components/TiltCard";
-import { AppearTitle, AppearWords } from "@/components/motion/Appear";
+import { AppearTitle } from "@/components/motion/Appear";
+import { cn } from "@/lib/utils";
 import { profile } from "@/lib/data";
 
-const pieces: {
+type Shard = {
   key: string;
-  from: { x: string; y: string; r: string };
+  from: { x: string; y: string; r: string; s?: string };
   delay: string;
+  eyebrow: string;
+  title?: string;
+  span: string;
+  tone?: "plain" | "ink" | "accent";
   content: ReactNode;
-}[] = [
+};
+
+const shards: Shard[] = [
   {
-    key: "p1",
-    from: { x: "-120px", y: "72px", r: "-7deg" },
-    delay: "60ms",
+    key: "origin",
+    from: { x: "-160px", y: "80px", r: "-8deg", s: "0.86" },
+    delay: "40ms",
+    eyebrow: "01 · Origin",
+    title: "Where the work starts",
+    span: "md:col-span-7",
+    content: (
+      <>
+        <p>
+          I’m {profile.name} — {profile.location}-based, shipping intelligent
+          product at{" "}
+          <a
+            href={profile.site}
+            className="font-semibold underline decoration-current/30 underline-offset-4"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {profile.company}
+          </a>
+          . I work in the narrow band where language models stop performing and
+          start operating: planning, calling tools, remembering what failed, and
+          recovering without drama.
+        </p>
+        <p className="mt-3">
+          That means I care as much about queues, schemas, and threat models as
+          I do about prompts. Magic that can’t survive latency or a bad tool
+          response isn’t a product — it’s a clip.
+        </p>
+      </>
+    ),
+  },
+  {
+    key: "bias",
+    from: { x: "140px", y: "-90px", r: "7deg", s: "0.88" },
+    delay: "110ms",
+    eyebrow: "02 · Bias",
+    title: "Learn by shipping",
+    span: "md:col-span-5",
+    tone: "accent",
     content: (
       <p>
-        I care about the intersection where agentic AI meets real engineering —
-        databases, distributed systems, infrastructure, and security — and the
-        open-source habits that keep that craft honest.
+        I don’t wait for perfect architecture docs. I ship the thinnest loop
+        that creates value, instrument it, then deepen autonomy only where the
+        human is clearly the bottleneck. Theory sticks when it has a scar from
+        production.
       </p>
     ),
   },
   {
-    key: "p2",
-    from: { x: "110px", y: "-64px", r: "6deg" },
-    delay: "140ms",
+    key: "systems",
+    from: { x: "-120px", y: "-100px", r: "-6deg", s: "0.87" },
+    delay: "180ms",
+    eyebrow: "03 · Systems",
+    title: "Agents as distributed systems",
+    span: "md:col-span-5",
+    content: (
+      <>
+        <p>
+          An agent is a distributed system with a language model in the middle.
+          Each tool call is another hop. Each retry is another chance to double
+          charge, double write, or double confuse the user.
+        </p>
+        <p className="mt-3">
+          So I design for idempotency, budgets, explicit timeouts, and state you
+          can query — not vibes about “context windows.” If you can’t answer
+          what the agent already tried, you can’t debug it.
+        </p>
+      </>
+    ),
+  },
+  {
+    key: "stack",
+    from: { x: "150px", y: "70px", r: "5deg", s: "0.9" },
+    delay: "250ms",
+    eyebrow: "04 · Stack taste",
+    title: "What I reach for",
+    span: "md:col-span-7",
+    tone: "ink",
+    content: (
+      <>
+        <p>
+          Day to day: agent loops with narrow tool contracts, durable job
+          tables, honest logging, and security checks small enough to fit in a
+          standup. I’m drawn to local-first and privacy-respecting software —
+          trust is infrastructure, not a footer link.
+        </p>
+        <p className="mt-3">
+          Outside the day job I study open tools like Document Studio and
+          OpenCanvasX — offline-capable, account-optional products that keep
+          bytes on the machine that opened them. That ethos shapes how I think
+          about agents and data too.
+        </p>
+      </>
+    ),
+  },
+  {
+    key: "public",
+    from: { x: "-90px", y: "120px", r: "-4deg", s: "0.9" },
+    delay: "320ms",
+    eyebrow: "05 · Public trail",
+    title: "Open by default",
+    span: "md:col-span-6",
     content: (
       <p>
-        Based in {profile.location}, I build at{" "}
+        I keep a public trail on{" "}
         <a
-          href={profile.site}
-          className="font-semibold text-[var(--ink)] underline decoration-[var(--ink)]/30 underline-offset-4"
+          href={profile.github}
+          className="font-semibold underline decoration-current/30 underline-offset-4"
           target="_blank"
           rel="noreferrer"
         >
-          {profile.company}
+          GitHub
         </a>{" "}
-        and keep a public trail of experiments on GitHub.
+        and write essays when a sharp edge is worth leaving for someone else —
+        including future me. Open source isn’t a row of logos; it’s the habit of
+        documenting the break so the next build doesn’t repeat it.
+      </p>
+    ),
+  },
+  {
+    key: "now",
+    from: { x: "110px", y: "110px", r: "6deg", s: "0.88" },
+    delay: "390ms",
+    eyebrow: "06 · Now",
+    title: "What I’m deepening",
+    span: "md:col-span-6",
+    tone: "accent",
+    content: (
+      <p>
+        At {profile.company} I’m pushing intelligent surfaces that people can
+        actually trust — clear plans, escape hatches, measurable outcomes. If
+        you care about agents that behave like real software, the trail is
+        public. Build in the open with me.
       </p>
     ),
   },
 ];
 
-const facts = [
-  {
-    label: "Focus",
-    value: "Agentic AI · Systems",
-    from: { x: "-100px", y: "48px", r: "-8deg" },
-    delay: "220ms",
-  },
-  {
-    label: "Mode",
-    value: "Learn by shipping",
-    from: { x: "90px", y: "70px", r: "7deg" },
-    delay: "300ms",
-  },
-  {
-    label: "Location",
-    value: profile.location,
-    from: { x: "-60px", y: "100px", r: "3deg" },
-    delay: "380ms",
-  },
-  {
-    label: "Company",
-    value: profile.company,
-    from: { x: "110px", y: "-36px", r: "-4deg" },
-    delay: "460ms",
-  },
-];
+const toneClass: Record<NonNullable<Shard["tone"]>, string> = {
+  plain: "border-[var(--line)] bg-white/90 text-[var(--ink-soft)]",
+  ink: "border-[var(--ink)]/15 bg-[#0F1115] text-[#E8EBE9]",
+  accent:
+    "border-[var(--accent)]/35 bg-[linear-gradient(160deg,#0F241C_0%,#16352A_100%)] text-[#E7F3EC]",
+};
 
 export function AboutSection() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -84,12 +175,11 @@ export function AboutSection() {
       return;
     }
 
-    // Assemble when in view; disperse again when scrolling away
     const io = new IntersectionObserver(
       ([entry]) => {
         root.classList.toggle("is-assembled", entry.isIntersecting);
       },
-      { threshold: 0.2, rootMargin: "0px 0px -12% 0px" },
+      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
     );
     io.observe(root);
     return () => io.disconnect();
@@ -101,83 +191,60 @@ export function AboutSection() {
       tone="mist"
       zIndex={10}
       eyebrow="About"
-      title="Builder of intelligent systems"
+      title="The system under the story"
       lead={profile.bio}
     >
-      <div
-        ref={rootRef}
-        className="assemble-root grid items-stretch gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10"
-      >
-        <div className="space-y-4 text-[0.95rem] leading-7 text-[var(--ink-soft)] sm:text-base sm:leading-8">
-          <AppearTitle className="mb-1 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--ink)] sm:text-2xl">
-            Assembling the story
-          </AppearTitle>
-          {pieces.map((piece) => (
+      <div ref={rootRef} className="assemble-root">
+        <AppearTitle className="mb-5 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--ink)] sm:mb-7 sm:text-2xl">
+          Shards of the craft
+        </AppearTitle>
+
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
+          {shards.map((shard) => (
             <div
-              key={piece.key}
-              className="assemble-piece rounded-t-2xl border border-[var(--line)] bg-white/80 p-4 shadow-[0_8px_24px_rgba(15,17,21,0.04)] sm:p-5"
+              key={shard.key}
+              className={cn(
+                "assemble-piece rounded-2xl border px-4 py-4 shadow-[0_12px_32px_rgba(15,17,21,0.06)] sm:px-5 sm:py-5",
+                shard.span,
+                toneClass[shard.tone ?? "plain"],
+              )}
               style={
                 {
-                  "--from-x": piece.from.x,
-                  "--from-y": piece.from.y,
-                  "--from-r": piece.from.r,
-                  "--delay": piece.delay,
+                  "--from-x": shard.from.x,
+                  "--from-y": shard.from.y,
+                  "--from-r": shard.from.r,
+                  "--from-s": shard.from.s ?? "0.9",
+                  "--delay": shard.delay,
                 } as CSSProperties
               }
             >
-              {piece.content}
+              <p
+                className={cn(
+                  "mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em]",
+                  shard.tone === "plain" || !shard.tone
+                    ? "text-[var(--muted)]"
+                    : "text-white/50",
+                )}
+              >
+                {shard.eyebrow}
+              </p>
+              {shard.title ? (
+                <h3
+                  className={cn(
+                    "mb-2.5 font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight sm:text-xl",
+                    shard.tone === "plain" || !shard.tone
+                      ? "text-[var(--ink)]"
+                      : "text-white",
+                  )}
+                >
+                  {shard.title}
+                </h3>
+              ) : null}
+              <div className="text-[0.92rem] leading-7 sm:text-[0.98rem] sm:leading-8">
+                {shard.content}
+              </div>
             </div>
           ))}
-
-          <dl className="grid grid-cols-2 gap-3 pt-1 sm:max-w-lg">
-            {facts.map((fact) => (
-              <div
-                key={fact.label}
-                className="assemble-piece rounded-t-xl border border-[var(--line)] bg-white/90 p-3.5 sm:p-4"
-                style={
-                  {
-                    "--from-x": fact.from.x,
-                    "--from-y": fact.from.y,
-                    "--from-r": fact.from.r,
-                    "--delay": fact.delay,
-                  } as CSSProperties
-                }
-              >
-                <dt className="text-[0.65rem] uppercase tracking-[0.22em] text-[var(--muted)]">
-                  {fact.label}
-                </dt>
-                <dd className="mt-1.5 font-semibold text-[var(--ink)]">
-                  <AppearWords text={fact.value} />
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        <div
-          className="assemble-piece relative mx-auto aspect-[4/5] w-full max-w-sm lg:mx-0 lg:ml-auto lg:max-w-none lg:aspect-auto lg:min-h-[300px]"
-          style={
-            {
-              "--from-x": "80px",
-              "--from-y": "90px",
-              "--from-r": "5deg",
-              "--delay": "180ms",
-            } as CSSProperties
-          }
-        >
-          <TiltCard
-            maxTilt={4}
-            className="relative h-full min-h-[inherit] overflow-hidden rounded-t-[1.5rem] border border-[var(--line)]"
-          >
-            <Image
-              src="/images/ai-systems.jpg"
-              alt="Abstract visualization of intelligent systems"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 420px"
-              loading="lazy"
-            />
-          </TiltCard>
         </div>
       </div>
     </StickySection>

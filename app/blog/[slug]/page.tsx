@@ -2,8 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { blogs, getBlogBySlug, profile, type BlogLink } from "@/lib/data";
+import { BlogBlocks } from "@/components/blog/BlogBlocks";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import {
+  blogs,
+  getBlogBySlug,
+  profile,
+  type BlogLink,
+} from "@/lib/data";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -31,9 +38,9 @@ function LinkChip({ link }: { link: BlogLink }) {
       href={link.href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-2 text-sm text-white/80 transition-colors hover:border-white/35 hover:text-white"
+      className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white px-3.5 py-2 text-sm text-[var(--ink-soft)] transition-colors hover:border-[var(--ink)]/25 hover:text-[var(--ink)]"
     >
-      <span className="text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-white/45">
+      <span className="text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">
         {link.kind ?? "link"}
       </span>
       {link.label}
@@ -47,7 +54,6 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = getBlogBySlug(slug);
   if (!post) notFound();
 
-  // blogs is newest-first; prev = newer, next = older chronologically in the list
   const index = blogs.findIndex((b) => b.slug === post.slug);
   const newer = index > 0 ? blogs[index - 1] : null;
   const older = index < blogs.length - 1 ? blogs[index + 1] : null;
@@ -55,18 +61,33 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-svh bg-[#0F241C] text-[#F3F7F4]">
-        <article className="mx-auto max-w-3xl px-5 pb-16 pt-10 sm:px-8 sm:pb-24 sm:pt-14">
-          <Link
-            href="/#blogs"
-            className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-white"
+      <main className="min-h-svh bg-[#F7F8FA] text-[var(--ink)]">
+        <article className="mx-auto w-full max-w-[72rem] px-4 pb-16 pt-[calc(var(--nav-h)+1.5rem)] sm:px-8 sm:pb-20 sm:pt-[calc(var(--nav-h)+2rem)] xl:px-10">
+          <nav
+            className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-[var(--muted)]"
+            aria-label="Breadcrumb"
           >
-            ← Back to blogs
-          </Link>
+            <Link
+              href="/#blogs"
+              className="inline-flex items-center gap-1.5 font-medium text-[var(--ink-soft)] transition-colors hover:text-[var(--ink)]"
+            >
+              <span aria-hidden>←</span>
+              Blog
+            </Link>
+            <span className="opacity-40" aria-hidden>
+              /
+            </span>
+            <Link
+              href="/"
+              className="transition-colors hover:text-[var(--ink)]"
+            >
+              Home
+            </Link>
+          </nav>
 
-          <header className="mt-8 sm:mt-10">
-            <div className="flex flex-wrap items-center gap-2 text-[0.68rem] uppercase tracking-[0.18em] text-white/50">
-              <span className="rounded-full border border-white/15 px-2.5 py-1 text-white/70">
+          <header className="mt-8 max-w-4xl sm:mt-10">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[0.7rem] uppercase tracking-[0.16em] text-[var(--muted)]">
+              <span className="rounded-full border border-[var(--line)] bg-white px-2.5 py-1 font-semibold text-[var(--ink-soft)]">
                 {post.category}
               </span>
               <time dateTime={post.date}>
@@ -76,47 +97,58 @@ export default async function BlogPostPage({ params }: PageProps) {
                   year: "numeric",
                 })}
               </time>
-              <span className="opacity-40">·</span>
+              <span className="opacity-35" aria-hidden>
+                ·
+              </span>
               <span>{post.readMinutes} min read</span>
             </div>
-            <h1 className="mt-4 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight sm:text-5xl sm:leading-[1.08]">
+
+            <h1 className="mt-4 font-[family-name:var(--font-display)] text-[clamp(1.9rem,4.2vw,3.4rem)] font-semibold leading-[1.12] tracking-tight text-[var(--ink)] sm:mt-5">
               {post.title}
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg sm:leading-8">
+
+            <p className="mt-4 max-w-3xl text-[1.05rem] leading-relaxed text-[var(--ink-soft)] sm:mt-5 sm:text-lg sm:leading-8">
               {post.excerpt}
             </p>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-full bg-white/[0.06] px-2.5 py-1 text-[0.68rem] text-white/55"
-                >
-                  #{tag}
-                </li>
-              ))}
-            </ul>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3 border-b border-[var(--line)] pb-6 sm:mt-8 sm:pb-8">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[var(--line)] bg-white">
+                  <Image
+                    src={profile.avatar}
+                    alt={profile.name}
+                    fill
+                    className="object-cover object-[center_15%]"
+                    sizes="44px"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-[var(--ink)]">
+                    {profile.name}
+                  </p>
+                  <p className="truncate text-xs text-[var(--muted)]">
+                    {profile.role} · {profile.company}
+                  </p>
+                </div>
+              </div>
+              <ul className="ml-auto flex flex-wrap gap-1.5">
+                {post.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="rounded-full bg-[var(--ink)]/[0.04] px-2.5 py-1 text-[0.68rem] text-[var(--muted)]"
+                  >
+                    #{tag}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </header>
 
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-t-2xl border border-white/10 sm:mt-10">
-            <Image
-              src={post.image}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
-              priority
-            />
-          </div>
-
-          <div className="mt-10 space-y-6 text-[1.02rem] leading-8 text-white/82 sm:mt-12 sm:text-[1.08rem] sm:leading-9">
-            {post.content.map((paragraph) => (
-              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-            ))}
-          </div>
+          <BlogBlocks blocks={post.content} />
 
           {post.links && post.links.length > 0 ? (
-            <div className="mt-10 border-t border-white/10 pt-8">
-              <p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/45">
+            <div className="mt-12 rounded-2xl border border-[var(--line)] bg-white p-5 sm:mt-14 sm:p-7">
+              <p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
                 Related links
               </p>
               <div className="flex flex-wrap gap-2.5">
@@ -127,12 +159,12 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
           ) : null}
 
-          <footer className="mt-14 border-t border-white/10 pt-8">
-            <p className="text-sm text-white/55">
+          <footer className="mt-14 border-t border-[var(--line)] pt-8 sm:mt-16">
+            <p className="text-sm text-[var(--muted)]">
               Written by{" "}
               <a
                 href={profile.github}
-                className="text-white underline decoration-white/25 underline-offset-4"
+                className="font-medium text-[var(--ink)] underline decoration-[var(--ink)]/20 underline-offset-4 transition-colors hover:decoration-[var(--ink)]/45"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -140,35 +172,55 @@ export default async function BlogPostPage({ params }: PageProps) {
               </a>
             </p>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 sm:gap-4">
               {newer ? (
                 <Link
                   href={`/blog/${newer.slug}`}
-                  className="rounded-t-xl border border-white/10 bg-white/[0.03] p-4 transition-colors hover:border-white/25"
+                  className="group rounded-2xl border border-[var(--line)] bg-white p-4 transition-colors hover:border-[var(--ink)]/20 sm:p-5"
                 >
-                  <p className="text-[0.65rem] uppercase tracking-[0.18em] text-white/45">
-                    Newer
+                  <p className="text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+                    ← Newer
                   </p>
-                  <p className="mt-2 font-semibold leading-snug">{newer.title}</p>
+                  <p className="mt-2 font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[var(--ink)] sm:text-lg">
+                    {newer.title}
+                  </p>
                 </Link>
               ) : (
-                <div />
+                <div className="hidden sm:block" />
               )}
               {older ? (
                 <Link
                   href={`/blog/${older.slug}`}
-                  className="rounded-t-xl border border-white/10 bg-white/[0.03] p-4 text-right transition-colors hover:border-white/25 sm:justify-self-end"
+                  className="group rounded-2xl border border-[var(--line)] bg-white p-4 text-left transition-colors hover:border-[var(--ink)]/20 sm:p-5 sm:text-right"
                 >
-                  <p className="text-[0.65rem] uppercase tracking-[0.18em] text-white/45">
-                    Older
+                  <p className="text-[0.65rem] uppercase tracking-[0.18em] text-[var(--muted)]">
+                    Older →
                   </p>
-                  <p className="mt-2 font-semibold leading-snug">{older.title}</p>
+                  <p className="mt-2 font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[var(--ink)] sm:text-lg">
+                    {older.title}
+                  </p>
                 </Link>
               ) : null}
+            </div>
+
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link
+                href="/#blogs"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+              >
+                All essays
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center rounded-full border border-[var(--line)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ink)] transition-colors hover:border-[var(--ink)]/25"
+              >
+                Back home
+              </Link>
             </div>
           </footer>
         </article>
       </main>
+      <SiteFooter />
     </>
   );
 }

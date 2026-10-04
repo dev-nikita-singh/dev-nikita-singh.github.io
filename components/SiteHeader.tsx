@@ -81,11 +81,11 @@ export function SiteHeader() {
 
       <div
         className={cn(
-          "overflow-hidden border-t border-[var(--line)] bg-white lg:hidden",
-          open ? "max-h-96" : "max-h-0 border-t-0",
+          "overflow-hidden border-t border-[var(--line)] bg-white transition-[max-height,border-color] duration-300 ease-out lg:hidden",
+          open ? "max-h-96" : "max-h-0 border-t-transparent",
         )}
       >
-        <nav className="flex flex-col gap-1 px-5 py-4" aria-label="Mobile">
+        <nav className="flex flex-col gap-1 px-4 py-4 sm:px-5" aria-label="Mobile">
           {navItems.map((item) => (
             <a
               key={item.href}

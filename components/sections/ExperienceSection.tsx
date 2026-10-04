@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { StickyScrollPanel } from "@/components/StickyScrollPanel";
 import { experiences } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -17,14 +18,14 @@ export function ExperienceSection() {
     let raf = 0;
 
     const update = () => {
-      const rect = wrap.getBoundingClientRect();
-      const view = window.innerHeight;
-      const start = view * 0.75;
-      const travel = Math.max(rect.height * 0.85, 1);
-      const progress = Math.min(1, Math.max(0, (start - rect.top) / travel));
+      const panel = wrap.closest(".sticky-panel") as HTMLElement | null;
+      const pin = panel?.dataset.pinProgress;
+      const progress = pin
+        ? Math.min(1, Math.max(0, parseFloat(pin) || 0))
+        : 0;
       fill.style.setProperty("--timeline-progress", progress.toFixed(4));
 
-      // Bidirectional: reveal on enter, disperse when scrolled away
+      const view = window.innerHeight;
       nodeRefs.current.forEach((node) => {
         if (!node) return;
         const r = node.getBoundingClientRect();
@@ -49,26 +50,26 @@ export function ExperienceSection() {
   }, []);
 
   return (
-    <section
+    <StickyScrollPanel
       id="experience"
-      className="relative overflow-x-hidden rounded-t-[1.5rem] bg-[#171E28] text-[#F2F4F7] shadow-[0_-12px_40px_rgba(10,10,10,0.14)] sm:rounded-t-[2.25rem]"
-      style={{ zIndex: 40 }}
+      zIndex={40}
+      className="rounded-t-[1.5rem] bg-[#171E28] text-[#F2F4F7] shadow-[0_-12px_40px_rgba(10,10,10,0.14)] sm:rounded-t-[2.25rem]"
     >
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
-        <div className="mb-10 max-w-3xl sm:mb-12">
-          <p className="mb-2 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-white/55">
+      <div className="mx-auto flex min-h-[var(--panel-height)] max-w-7xl flex-col px-4 pb-8 pt-7 sm:px-8 sm:pb-12 sm:pt-10">
+        <div className="mb-8 max-w-3xl sm:mb-12">
+          <p className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-white/55 sm:text-[0.7rem]">
             Experience
           </p>
-          <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight sm:text-5xl">
             Work timeline
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-lg sm:leading-8">
+          <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-white/70 sm:mt-3 sm:text-lg sm:leading-8">
             One path through roles and learning chapters — from foundations to
             shipping at Sovaria.
           </p>
         </div>
 
-        <div ref={wrapRef} className="relative pl-2 sm:pl-0">
+        <div ref={wrapRef} className="relative flex-1 pl-2 sm:pl-0">
           <div className="absolute bottom-2 left-[0.85rem] top-2 w-px bg-white/15 sm:left-[6.75rem]" />
           <div
             ref={fillRef}
@@ -90,9 +91,6 @@ export function ExperienceSection() {
                 style={{ ["--delay" as string]: `${index * 70}ms` }}
               >
                 <div className="pl-8 pt-1 sm:pl-0 sm:text-right">
-                  <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--accent)]">
-                    {job.year}
-                  </p>
                   <p className="mt-1 hidden text-[0.7rem] leading-5 text-white/45 sm:block">
                     {job.period}
                   </p>
@@ -136,6 +134,6 @@ export function ExperienceSection() {
           </ol>
         </div>
       </div>
-    </section>
+    </StickyScrollPanel>
   );
 }
